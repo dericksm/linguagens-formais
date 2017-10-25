@@ -12,11 +12,9 @@ package com.Model.Class;
 public class ModelTransicao {
     
     private String inicial;
-    private String transicao;
-    private String destino;
-
-    public ModelTransicao() {
-    }
+    private String terminais;
+    private String naoTerminais;
+    private String producoes;
 
     public String getInicial() {
         return inicial;
@@ -26,20 +24,28 @@ public class ModelTransicao {
         this.inicial = inicial;
     }
 
-    public String getTransicao() {
-        return transicao;
+    public String getTerminais() {
+        return terminais;
     }
 
-    public void setTransicao(String transicao) {
-        this.transicao = transicao;
+    public void setTerminais(String terminais) {
+        this.terminais = terminais;
     }
 
-    public String getDestino() {
-        return destino;
+    public String getNaoTerminais() {
+        return naoTerminais;
     }
 
-    public void setDestino(String destino) {
-        this.destino = destino;
+    public void setNaoTerminais(String naoTerminais) {
+        this.naoTerminais = naoTerminais;
     }
-    
+
+    public String getProducoes() {
+        return producoes;
+    }
+
+    public void setProducoes(String producoes) {
+        this.producoes = producoes;
+    }
+
 }
