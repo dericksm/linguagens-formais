@@ -32,42 +32,39 @@
                       <Component id="btnEnviarInicial" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnAlterarInicial" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="331" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="campoTerminais" min="-2" pref="120" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnEnviarTerminal" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnAlterarTerminal" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Component id="campoNaoTerminais" min="-2" pref="120" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnEnviarNaoTerminal" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnAlterarNaoTerminal" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                              <Component id="campoProducoes" min="-2" pref="120" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnEnviarProd" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnExcluirProd" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="listaProducoes" alignment="0" max="32767" attributes="0"/>
-                          <Component id="btnEnviarProd1" alignment="0" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="campoTerminais" min="-2" pref="120" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnEnviarTerminal" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnAlterarTerminal" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="campoNaoTerminais" min="-2" pref="120" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnEnviarNaoTerminal" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnAlterarNaoTerminal" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                          <Component id="campoProducoes" min="-2" pref="120" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnEnviarProd" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnExcluirProd" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="listaProducoes" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnEnviarProd1" alignment="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -125,25 +122,25 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Enviar"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEnviarInicialActionPerformed"/>
-      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="btnEnviarInicial.addActionListener(listener);&#xa;btnEnviarInicial.setActionCommand(&quot;inicial&quot;);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JToggleButton" name="btnAlterarInicial">
       <Properties>
         <Property name="text" type="java.lang.String" value="Alterar"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAlterarInicialActionPerformed"/>
-      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="btnAlterarInicial.addActionListener(listener);&#xa;btnAlterarInicial.setActionCommand(&quot;alterarInicial&quot;);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JToggleButton" name="btnAlterarTerminal">
       <Properties>
         <Property name="text" type="java.lang.String" value="Alterar"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAlterarTerminalActionPerformed"/>
-      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="btnAlterarTerminal.addActionListener(listener);&#xa;btnAlterarTerminal.setActionCommand(&quot;alterarTerminal&quot;);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
@@ -156,9 +153,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Enviar"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEnviarTerminalActionPerformed"/>
-      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="btnEnviarTerminal.addActionListener(listener);&#xa;btnEnviarTerminal.setActionCommand(&quot;terminais&quot;);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JTextField" name="campoNaoTerminais">
     </Component>
@@ -166,17 +163,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Enviar"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEnviarNaoTerminalActionPerformed"/>
-      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="btnEnviarNaoTerminal.addActionListener(listener);&#xa;btnEnviarNaoTerminal.setActionCommand(&quot;naoTerminais&quot;);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JToggleButton" name="btnAlterarNaoTerminal">
       <Properties>
         <Property name="text" type="java.lang.String" value="Alterar"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAlterarNaoTerminalActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
@@ -187,17 +181,11 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Enviar"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEnviarProdActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JToggleButton" name="btnExcluirProd">
       <Properties>
         <Property name="text" type="java.lang.String" value="Excluir"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExcluirProdActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
@@ -208,9 +196,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Montar Gram&#xe1;tica Regular"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEnviarProd1ActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JFormattedTextField" name="campoInicial">
       <Properties>

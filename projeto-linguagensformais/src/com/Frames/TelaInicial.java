@@ -5,7 +5,7 @@
  */
 package com.Frames;
 
-
+import com.Listener.TelaInicialListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,9 +29,12 @@ import javax.swing.text.PlainDocument;
  */
 public class TelaInicial extends javax.swing.JFrame {
 
-    /**
-     * Creates new form TelaInicial
-     */
+    TelaInicialListener listener = new TelaInicialListener(this);
+
+    String[] arrayNaoTerminais;
+    String[] arrayTerminais;
+    String inicial;
+
     public TelaInicial() {
         initComponents();
 
@@ -48,8 +51,6 @@ public class TelaInicial extends javax.swing.JFrame {
         }
         SwingUtilities.updateComponentTreeUI(this);
         updateComponentTreeUI(this);
-
-        
 
         campoNaoTerminais.setDocument(new PlainDocument() {
             @Override
@@ -79,12 +80,52 @@ public class TelaInicial extends javax.swing.JFrame {
                         return;
                     }
                 }
-                super.insertString(offs, str.toLowerCase()+ ",", a);
+                super.insertString(offs, str.toLowerCase() + ",", a);
             }
         });
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+    }
+
+    public void trataNaoTerminais() {
+        arrayNaoTerminais = campoNaoTerminais.getText().split(",");
+        for (String arrayValore : arrayNaoTerminais) {
+            System.out.println(arrayValore);
+        }
+        campoNaoTerminais.setEnabled(false);
+        btnEnviarNaoTerminal.setEnabled(false);
+    }
+
+    public void trataTerminais() {
+        campoNaoTerminais.getText().split(",");
+        for (String arrayValore : arrayTerminais) {
+            System.out.println(arrayValore);
+
+        }
+        campoNaoTerminais.setEnabled(false);
+        btnEnviarTerminal.setEnabled(false);
+    }
+
+    public void trataInicial() {
+        inicial = campoInicial.getText();
+        btnEnviarInicial.setEnabled(false);
+        campoInicial.setEditable(false);
+    }
+    
+    public void alteraInicial() {
+        campoInicial.setEditable(true);
+        btnEnviarInicial.setEnabled(true);        
+    }
+    
+    public void alteraTerminal() {
+        campoTerminais.setEditable(true);
+        btnEnviarTerminal.setEnabled(true);        
+    }
+    
+    public void alteraNaoTerminal() {
+        campoNaoTerminais.setEditable(true);
+        btnEnviarNaoTerminal.setEnabled(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -114,74 +155,39 @@ public class TelaInicial extends javax.swing.JFrame {
 
         jLabel1.setText("Informe o Símbolo Inicial:");
 
+        btnEnviarInicial.addActionListener(listener);
+        btnEnviarInicial.setActionCommand("inicial");
         btnEnviarInicial.setText("Enviar");
-        btnEnviarInicial.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEnviarInicialActionPerformed(evt);
-            }
-        });
 
+        btnAlterarInicial.addActionListener(listener);
+        btnAlterarInicial.setActionCommand("alterarInicial");
         btnAlterarInicial.setText("Alterar");
-        btnAlterarInicial.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAlterarInicialActionPerformed(evt);
-            }
-        });
 
+        btnAlterarTerminal.addActionListener(listener);
+        btnAlterarTerminal.setActionCommand("alterarTerminal");
         btnAlterarTerminal.setText("Alterar");
-        btnAlterarTerminal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAlterarTerminalActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("Informe os Terminais:");
 
+        btnEnviarTerminal.addActionListener(listener);
+        btnEnviarTerminal.setActionCommand("terminais");
         btnEnviarTerminal.setText("Enviar");
-        btnEnviarTerminal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEnviarTerminalActionPerformed(evt);
-            }
-        });
 
+        btnEnviarNaoTerminal.addActionListener(listener);
+        btnEnviarNaoTerminal.setActionCommand("naoTerminais");
         btnEnviarNaoTerminal.setText("Enviar");
-        btnEnviarNaoTerminal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEnviarNaoTerminalActionPerformed(evt);
-            }
-        });
 
         btnAlterarNaoTerminal.setText("Alterar");
-        btnAlterarNaoTerminal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAlterarNaoTerminalActionPerformed(evt);
-            }
-        });
 
         jLabel4.setText("Informe os Não Terminais:");
 
         btnEnviarProd.setText("Enviar");
-        btnEnviarProd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEnviarProdActionPerformed(evt);
-            }
-        });
 
         btnExcluirProd.setText("Excluir");
-        btnExcluirProd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExcluirProdActionPerformed(evt);
-            }
-        });
 
         jLabel7.setText("Informe as Produções:");
 
         btnEnviarProd1.setText("Montar Gramática Regular");
-        btnEnviarProd1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEnviarProd1ActionPerformed(evt);
-            }
-        });
 
         try {
             campoInicial.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("U")));
@@ -213,36 +219,34 @@ public class TelaInicial extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEnviarInicial)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAlterarInicial)
-                        .addGap(331, 331, 331))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(campoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEnviarTerminal)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnAlterarTerminal))
-                            .addComponent(jLabel3)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(campoNaoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEnviarNaoTerminal)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnAlterarNaoTerminal))
-                            .addComponent(jLabel4)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEnviarProd)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnExcluirProd))
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel7)
-                            .addComponent(listaProducoes)
-                            .addComponent(btnEnviarProd1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(btnAlterarInicial))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(campoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnEnviarTerminal)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnAlterarTerminal))
+                        .addComponent(jLabel3)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(campoNaoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnEnviarNaoTerminal)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnAlterarNaoTerminal))
+                        .addComponent(jLabel4)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(1, 1, 1)
+                            .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnEnviarProd)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnExcluirProd))
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel7)
+                        .addComponent(listaProducoes)
+                        .addComponent(btnEnviarProd1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -284,42 +288,6 @@ public class TelaInicial extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnEnviarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarInicialActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEnviarInicialActionPerformed
-
-    private void btnAlterarInicialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarInicialActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAlterarInicialActionPerformed
-
-    private void btnAlterarTerminalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarTerminalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAlterarTerminalActionPerformed
-
-    private void btnEnviarTerminalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarTerminalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEnviarTerminalActionPerformed
-
-    private void btnEnviarNaoTerminalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarNaoTerminalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEnviarNaoTerminalActionPerformed
-
-    private void btnAlterarNaoTerminalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarNaoTerminalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAlterarNaoTerminalActionPerformed
-
-    private void btnEnviarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarProdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEnviarProdActionPerformed
-
-    private void btnExcluirProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirProdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnExcluirProdActionPerformed
-
-    private void btnEnviarProd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarProd1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEnviarProd1ActionPerformed
 
     private void campoProducoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoProducoesActionPerformed
         // TODO add your handling code here:
