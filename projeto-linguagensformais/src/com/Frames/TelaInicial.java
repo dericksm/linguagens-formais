@@ -10,11 +10,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import static javax.swing.SwingUtilities.updateComponentTreeUI;
 import javax.swing.UIManager;
@@ -24,10 +29,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.PlainDocument;
 
-/**
- *
- * @author comp9
- */
+
 public class TelaInicial extends javax.swing.JFrame {
 
     TelaInicialListener listener = new TelaInicialListener(this);
@@ -36,7 +38,8 @@ public class TelaInicial extends javax.swing.JFrame {
     String[] arrayTerminais;
     String[] arrayProducoes;
     String inicial;
-    String producoes = "";
+    DefaultListModel modelo = new DefaultListModel();
+    
 
     public TelaInicial() {
         initComponents();
@@ -86,11 +89,12 @@ public class TelaInicial extends javax.swing.JFrame {
                 super.insertString(offs, str.toLowerCase() + ",", a);
             }
         });
-
+        listaProducoes.setModel(modelo);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
-
+    
+   
     public void trataNaoTerminais() {
 
         if (campoNaoTerminais.getText().isEmpty()) {
@@ -137,24 +141,29 @@ public class TelaInicial extends javax.swing.JFrame {
     public void alteraInicial() {
         campoInicial.setEditable(true);
         btnEnviarInicial.setEnabled(true);
+        campoInicial.requestFocus();
     }
 
     public void alteraTerminal() {
         campoTerminais.setEditable(true);
         btnEnviarTerminal.setEnabled(true);
+        campoTerminais.requestFocus();
     }
 
     public void alteraNaoTerminal() {
         campoNaoTerminais.setEditable(true);
         btnEnviarNaoTerminal.setEnabled(true);
+        campoNaoTerminais.requestFocus();
     }
 
     public void trataProducoes() {
+        
         boolean verificaProd = true;
         for (String terminais : arrayNaoTerminais) {
             if (campoProducoes.getText().charAt(0) == terminais.charAt(0)) {
-                producoes += campoProducoes.getText() + '\n';
-                listaProducoes.setText(producoes);
+                modelo.add(modelo.getSize(), campoProducoes.getText().toString());
+                
+
                 verificaProd = true;
                 break;
             } else {
@@ -164,9 +173,14 @@ public class TelaInicial extends javax.swing.JFrame {
         if (verificaProd == false) {
             JOptionPane.showMessageDialog(this, "Produção Inválida, " + campoProducoes.getText().charAt(0) + " não é um simbolo não terminal");
         }
-        
+
         campoProducoes.setText("");
         campoProducoes.requestFocus();
+    }
+
+    public void removeProducao() {
+        int index = listaProducoes.getSelectedIndex();
+        modelo.remove(index);
     }
 
     @SuppressWarnings("unchecked")
@@ -190,8 +204,8 @@ public class TelaInicial extends javax.swing.JFrame {
         btnEnviarProd1 = new javax.swing.JToggleButton();
         campoInicial = new javax.swing.JFormattedTextField();
         campoProducoes = new javax.swing.JFormattedTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listaProducoes = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listaProducoes = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -229,6 +243,8 @@ public class TelaInicial extends javax.swing.JFrame {
         btnEnviarProd.setActionCommand("producoes");
         btnEnviarProd.setText("Enviar");
 
+        btnExcluirProd.addActionListener(listener);
+        btnExcluirProd.setActionCommand("remover");
         btnExcluirProd.setText("Excluir");
 
         jLabel7.setText("Informe as Produções:");
@@ -253,10 +269,7 @@ public class TelaInicial extends javax.swing.JFrame {
             }
         });
 
-        listaProducoes.setColumns(20);
-        listaProducoes.setRows(5);
-        listaProducoes.setWrapStyleWord(true);
-        jScrollPane1.setViewportView(listaProducoes);
+        jScrollPane2.setViewportView(listaProducoes);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -265,7 +278,7 @@ public class TelaInicial extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -333,9 +346,9 @@ public class TelaInicial extends javax.swing.JFrame {
                     .addComponent(btnEnviarProd)
                     .addComponent(btnExcluirProd)
                     .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEnviarProd1)
                 .addContainerGap(286, Short.MAX_VALUE))
         );
@@ -408,7 +421,7 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea listaProducoes;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JList<String> listaProducoes;
     // End of variables declaration//GEN-END:variables
 }

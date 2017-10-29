@@ -38,6 +38,8 @@ public class TelaInicialListener implements ActionListener{
             tela.alteraNaoTerminal();
         } else if("alterarTerminal".equals(e.getActionCommand())) {
             tela.alteraTerminal();
+        } else if("remover".equals(e.getActionCommand())) {
+            tela.removeProducao();
         }
         
     }
