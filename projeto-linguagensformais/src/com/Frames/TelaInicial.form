@@ -229,6 +229,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Montar Gram&#xe1;tica Regular"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="montarGramatica.addActionListener(listener);&#xa;montarGramatica.setActionCommand(&quot;montarGramatica&quot;);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JFormattedTextField" name="campoInicial">
       <Properties>

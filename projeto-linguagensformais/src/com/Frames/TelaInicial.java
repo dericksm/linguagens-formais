@@ -100,12 +100,24 @@ public class TelaInicial extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor, preencha o campo não terminais");
 
         } else {
-            arrayNaoTerminais = campoNaoTerminais.getText().split(",");
-            for (String arrayValore : arrayNaoTerminais) {
-                System.out.println(arrayValore);
+
+            String naoTerminais = inicial + ",";
+
+            naoTerminais += campoNaoTerminais.getText();
+
+            arrayNaoTerminais = naoTerminais.split(",");
+            for (int i = 1; i < arrayNaoTerminais.length; i++) {
+                if (arrayNaoTerminais[i].equals(inicial)) {
+                    JOptionPane.showMessageDialog(this, "O símbolo " + inicial + " é o termo inicial");
+                    arrayNaoTerminais = null;
+                    break;
+                } else {
+                    campoNaoTerminais.setEditable(false);
+                    btnEnviarNaoTerminal.setEnabled(false);
+                }
+
             }
-            campoNaoTerminais.setEditable(false);
-            btnEnviarNaoTerminal.setEnabled(false);
+
         }
     }
 
@@ -158,8 +170,19 @@ public class TelaInicial extends javax.swing.JFrame {
     public void trataProducoes() {
 
         boolean verificaProd = true;
-        for (String terminais : arrayNaoTerminais) {
-            if (campoProducoes.getText().charAt(0) == terminais.charAt(0) || campoProducoes.getText().charAt(0) == inicial.charAt(0) ) {
+
+        for (int i = 0; i < arrayNaoTerminais.length; i++) {
+
+            if (campoProducoes.getText().charAt(0) == arrayNaoTerminais[i].charAt(0)) {
+
+                for (int j = 0; j < modelo.getSize(); j++) {
+                    if (modelo.getElementAt(j).equals(campoProducoes.getText())) {
+                        JOptionPane.showMessageDialog(this, "Producao já existe");
+                        return;
+                    }
+
+                }
+
                 modelo.add(modelo.getSize(), campoProducoes.getText().toString());
 
                 verificaProd = true;
@@ -173,16 +196,23 @@ public class TelaInicial extends javax.swing.JFrame {
         }
 
         campoProducoes.requestFocus();
-        campoProducoes.setText("");
+
     }
 
     public void trataProducaoVazia() {
 
         boolean verificaProd = true;
-        for (String terminais : arrayNaoTerminais) {
-            if (campoProducaoVazia.getText().charAt(0) == terminais.charAt(0) || campoProducaoVazia.getText().charAt(0) == inicial.charAt(0) ) {
-                modelo.add(modelo.getSize(), campoProducaoVazia.getText().toString());
+        for (int i = 0; i < arrayNaoTerminais.length; i++) {
 
+            if (campoProducaoVazia.getText().charAt(0) == arrayNaoTerminais[i].charAt(0)) {
+                for (int j = 0; j < modelo.getSize(); j++) {
+                    if (modelo.getElementAt(j).equals(campoProducaoVazia.getText())) {
+                        JOptionPane.showMessageDialog(this, "Producao já existe");
+                        return;
+                    }
+
+                }
+                modelo.add(modelo.getSize(), campoProducaoVazia.getText().toString());
                 verificaProd = true;
                 break;
             } else {
@@ -194,12 +224,41 @@ public class TelaInicial extends javax.swing.JFrame {
         }
 
         campoProducaoVazia.requestFocus();
-        campoProducaoVazia.setText("");
+
     }
 
     public void removeProducao() {
         int index = listaProducoes.getSelectedIndex();
         modelo.remove(index);
+    }
+
+    public void montaGramatica() {
+
+        String producoes = listaProducoes.getModel().toString();
+        String[] arrayStringsProducoes = producoes.split(",");
+        for (int i = 0; i < arrayStringsProducoes.length; i++) {
+            arrayStringsProducoes[i] = arrayStringsProducoes[i].replace("^[, []]", "");
+            System.out.println(arrayStringsProducoes[i]);
+        }
+        juntaProducoes(arrayStringsProducoes);
+    }
+
+    private void juntaProducoes(String[] arrayStringsProducoes) {
+
+        String[] arrayComparar = arrayStringsProducoes;
+        String[] arrayFinal = new String[arrayStringsProducoes.length];
+        int index = 0;
+        for (String a1 : arrayNaoTerminais) {
+            arrayFinal[index] = a1 + " ->";
+            for (String a2 : arrayComparar) {
+                if (a1.charAt(0) == a2.charAt(1)) {
+
+                    arrayFinal[index] += " |" + a2.substring(5, a2.length());
+                }
+            }
+            index++;
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -272,6 +331,8 @@ public class TelaInicial extends javax.swing.JFrame {
 
         jLabel7.setText("Informe as Produções:");
 
+        montarGramatica.addActionListener(listener);
+        montarGramatica.setActionCommand("montarGramatica");
         montarGramatica.setText("Montar Gramática Regular");
 
         try {
@@ -477,4 +538,5 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JList<String> listaProducoes;
     private javax.swing.JToggleButton montarGramatica;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -42,6 +42,8 @@ public class TelaInicialListener implements ActionListener{
             tela.alteraTerminal();
         } else if("remover".equals(e.getActionCommand())) {
             tela.removeProducao();
+        } else if("montarGramatica".equals(e.getActionCommand())) {
+            tela.montaGramatica();
         }
         
     }
