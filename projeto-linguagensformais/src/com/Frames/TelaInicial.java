@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import static javax.swing.SwingUtilities.updateComponentTreeUI;
 import javax.swing.UIManager;
@@ -33,7 +34,9 @@ public class TelaInicial extends javax.swing.JFrame {
 
     String[] arrayNaoTerminais;
     String[] arrayTerminais;
+    String[] arrayProducoes;
     String inicial;
+    String producoes = "";
 
     public TelaInicial() {
         initComponents();
@@ -89,43 +92,81 @@ public class TelaInicial extends javax.swing.JFrame {
     }
 
     public void trataNaoTerminais() {
-        arrayNaoTerminais = campoNaoTerminais.getText().split(",");
-        for (String arrayValore : arrayNaoTerminais) {
-            System.out.println(arrayValore);
+
+        if (campoNaoTerminais.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha o campo não terminais");
+
+        } else {
+            arrayNaoTerminais = campoNaoTerminais.getText().split(",");
+            for (String arrayValore : arrayNaoTerminais) {
+                System.out.println(arrayValore);
+            }
+            campoNaoTerminais.setEditable(false);
+            btnEnviarNaoTerminal.setEnabled(false);
         }
-        campoNaoTerminais.setEnabled(false);
-        btnEnviarNaoTerminal.setEnabled(false);
     }
 
     public void trataTerminais() {
-        campoNaoTerminais.getText().split(",");
-        for (String arrayValore : arrayTerminais) {
-            System.out.println(arrayValore);
 
+        if (campoTerminais.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha o campo terminais");
+
+        } else {
+            arrayTerminais = campoTerminais.getText().split(",");
+            for (String arrayValore : arrayTerminais) {
+                System.out.println(arrayValore);
+
+            }
+            campoTerminais.setEditable(false);
+            btnEnviarTerminal.setEnabled(false);
         }
-        campoNaoTerminais.setEnabled(false);
-        btnEnviarTerminal.setEnabled(false);
+
     }
 
     public void trataInicial() {
-        inicial = campoInicial.getText();
-        btnEnviarInicial.setEnabled(false);
-        campoInicial.setEditable(false);
+        if (campoInicial.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha o campo inicial");
+        } else {
+            inicial = campoInicial.getText();
+            btnEnviarInicial.setEnabled(false);
+            campoInicial.setEditable(false);
+        }
+
     }
-    
+
     public void alteraInicial() {
         campoInicial.setEditable(true);
-        btnEnviarInicial.setEnabled(true);        
+        btnEnviarInicial.setEnabled(true);
     }
-    
+
     public void alteraTerminal() {
         campoTerminais.setEditable(true);
-        btnEnviarTerminal.setEnabled(true);        
+        btnEnviarTerminal.setEnabled(true);
     }
-    
+
     public void alteraNaoTerminal() {
         campoNaoTerminais.setEditable(true);
         btnEnviarNaoTerminal.setEnabled(true);
+    }
+
+    public void trataProducoes() {
+        boolean verificaProd = true;
+        for (String terminais : arrayNaoTerminais) {
+            if (campoProducoes.getText().charAt(0) == terminais.charAt(0)) {
+                producoes += campoProducoes.getText() + '\n';
+                listaProducoes.setText(producoes);
+                verificaProd = true;
+                break;
+            } else {
+                verificaProd = false;
+            }
+        }
+        if (verificaProd == false) {
+            JOptionPane.showMessageDialog(this, "Produção Inválida, " + campoProducoes.getText().charAt(0) + " não é um simbolo não terminal");
+        }
+        
+        campoProducoes.setText("");
+        campoProducoes.requestFocus();
     }
 
     @SuppressWarnings("unchecked")
@@ -148,8 +189,9 @@ public class TelaInicial extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         btnEnviarProd1 = new javax.swing.JToggleButton();
         campoInicial = new javax.swing.JFormattedTextField();
-        listaProducoes = new javax.swing.JTextField();
         campoProducoes = new javax.swing.JFormattedTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listaProducoes = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -177,10 +219,14 @@ public class TelaInicial extends javax.swing.JFrame {
         btnEnviarNaoTerminal.setActionCommand("naoTerminais");
         btnEnviarNaoTerminal.setText("Enviar");
 
+        btnAlterarNaoTerminal.addActionListener(listener);
+        btnAlterarNaoTerminal.setActionCommand("alterarNaoTerminal");
         btnAlterarNaoTerminal.setText("Alterar");
 
         jLabel4.setText("Informe os Não Terminais:");
 
+        btnEnviarProd.addActionListener(listener);
+        btnEnviarProd.setActionCommand("producoes");
         btnEnviarProd.setText("Enviar");
 
         btnExcluirProd.setText("Excluir");
@@ -207,6 +253,11 @@ public class TelaInicial extends javax.swing.JFrame {
             }
         });
 
+        listaProducoes.setColumns(20);
+        listaProducoes.setRows(5);
+        listaProducoes.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(listaProducoes);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -214,39 +265,42 @@ public class TelaInicial extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(campoInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEnviarInicial)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAlterarInicial))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(campoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnEnviarTerminal)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnAlterarTerminal))
-                        .addComponent(jLabel3)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(campoNaoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnEnviarNaoTerminal)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnAlterarNaoTerminal))
-                        .addComponent(jLabel4)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(1, 1, 1)
-                            .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnEnviarProd)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnExcluirProd))
-                        .addComponent(jLabel1)
-                        .addComponent(jLabel7)
-                        .addComponent(listaProducoes)
-                        .addComponent(btnEnviarProd1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(campoInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEnviarInicial)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnAlterarInicial))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(campoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnEnviarTerminal)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnAlterarTerminal))
+                                .addComponent(jLabel3)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(campoNaoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnEnviarNaoTerminal)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnAlterarNaoTerminal))
+                                .addComponent(jLabel4)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(1, 1, 1)
+                                    .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnEnviarProd)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnExcluirProd))
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel7)
+                                .addComponent(btnEnviarProd1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,8 +333,8 @@ public class TelaInicial extends javax.swing.JFrame {
                     .addComponent(btnEnviarProd)
                     .addComponent(btnExcluirProd)
                     .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(listaProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEnviarProd1)
                 .addContainerGap(286, Short.MAX_VALUE))
@@ -354,6 +408,7 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JTextField listaProducoes;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea listaProducoes;
     // End of variables declaration//GEN-END:variables
 }
