@@ -53,13 +53,6 @@
                                   <Component id="btnAlterarNaoTerminal" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" attributes="0">
-                                  <Component id="campoProducoes" min="-2" pref="120" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnEnviarProd" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnExcluirProd" min="-2" max="-2" attributes="0"/>
-                              </Group>
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="montarGramatica" alignment="0" max="32767" attributes="0"/>
@@ -71,6 +64,13 @@
                                   <Component id="btnExcluirProdVazia" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="campoProducoes" min="-2" pref="101" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnEnviarProd" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnExcluirProd" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -110,14 +110,12 @@
               <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
               <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnEnviarProd" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnExcluirProd" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="campoProducoes" alignment="0" min="-2" pref="24" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnEnviarProd" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnExcluirProd" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="campoProducoes" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
               <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -257,13 +255,6 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JFormattedTextField" name="campoProducoes">
-      <Properties>
-        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor" preCode="try {" postCode="} catch (java.text.ParseException ex) {&#xa;ex.printStackTrace();&#xa;}">
-          <Format format="U -&gt; LU" subtype="-1" type="5"/>
-        </Property>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JToggleButton" name="btnEnviarProdVazia">
       <Properties>
         <Property name="text" type="java.lang.String" value="Enviar"/>
@@ -291,6 +282,8 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Inserir Producao Vazia"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JFormattedTextField" name="campoProducoes">
     </Component>
   </SubComponents>
 </Form>

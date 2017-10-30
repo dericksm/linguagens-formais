@@ -38,6 +38,8 @@ public class TelaInicial extends javax.swing.JFrame {
     String[] arrayTerminais;
     String[] arrayProducoes;
     String inicial;
+    MaskFormatter mascara;
+    String valoresMascara;
     DefaultListModel modelo = new DefaultListModel();
 
     public TelaInicial() throws ParseException {
@@ -88,7 +90,12 @@ public class TelaInicial extends javax.swing.JFrame {
                 super.insertString(offs, str.toLowerCase() + ",", a);
             }
         });
-
+        
+        mascara = new MaskFormatter("U-> LU");
+        this.campoProducoes.setFormatterFactory(null);
+        this.campoProducoes.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(mascara));
+        this.campoProducoes.setValue(null);
+        
         listaProducoes.setModel(modelo);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -119,6 +126,12 @@ public class TelaInicial extends javax.swing.JFrame {
             }
 
         }
+        System.out.println(valoresMascara + "antes");
+        for (String arrayNaoTerminai : arrayNaoTerminais) {
+            mascara.setValidCharacters(valoresMascara+=arrayNaoTerminai);
+            
+        }
+        System.out.println(valoresMascara);
     }
 
     public void trataTerminais() {
@@ -283,11 +296,11 @@ public class TelaInicial extends javax.swing.JFrame {
         campoInicial = new javax.swing.JFormattedTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         listaProducoes = new javax.swing.JList<>();
-        campoProducoes = new javax.swing.JFormattedTextField();
         btnEnviarProdVazia = new javax.swing.JToggleButton();
         campoProducaoVazia = new javax.swing.JFormattedTextField();
         btnExcluirProdVazia = new javax.swing.JToggleButton();
         jLabel8 = new javax.swing.JLabel();
+        campoProducoes = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -344,12 +357,6 @@ public class TelaInicial extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(listaProducoes);
 
-        try {
-            campoProducoes.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("U -> LU")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-
         btnEnviarProdVazia.addActionListener(listener);
         btnEnviarProdVazia.setActionCommand("producaoVazia");
         btnEnviarProdVazia.setText("Enviar");
@@ -397,12 +404,6 @@ public class TelaInicial extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btnAlterarNaoTerminal))
                                 .addComponent(jLabel4)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnEnviarProd)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnExcluirProd))
                                 .addComponent(jLabel1)
                                 .addComponent(jLabel7)
                                 .addComponent(montarGramatica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -412,7 +413,13 @@ public class TelaInicial extends javax.swing.JFrame {
                                     .addComponent(btnEnviarProdVazia)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btnExcluirProdVazia))
-                                .addComponent(jLabel8)))
+                                .addComponent(jLabel8))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEnviarProd)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnExcluirProd)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -443,12 +450,11 @@ public class TelaInicial extends javax.swing.JFrame {
                 .addGap(14, 14, 14)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnEnviarProd)
-                        .addComponent(btnExcluirProd))
-                    .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEnviarProd)
+                    .addComponent(btnExcluirProd)
+                    .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
