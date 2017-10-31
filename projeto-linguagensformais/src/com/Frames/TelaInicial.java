@@ -39,7 +39,7 @@ public class TelaInicial extends javax.swing.JFrame {
     String[] arrayProducoes;
     String inicial;
     MaskFormatter mascara;
-    String valoresMascara;
+    String valoresMascara = "";
     DefaultListModel modelo = new DefaultListModel();
 
     public TelaInicial() throws ParseException {
@@ -90,13 +90,34 @@ public class TelaInicial extends javax.swing.JFrame {
                 super.insertString(offs, str.toLowerCase() + ",", a);
             }
         });
-        
+
+        //sobrescreve a mascara do campo
         mascara = new MaskFormatter("U-> LU");
         this.campoProducoes.setFormatterFactory(null);
         this.campoProducoes.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(mascara));
         this.campoProducoes.setValue(null);
-        
+
         listaProducoes.setModel(modelo);
+
+        //desativa os botoes
+        btnEnviarNaoTerminal.setEnabled(false);
+        btnEnviarProd.setEnabled(false);
+        btnEnviarProdVazia.setEnabled(false);
+        btnEnviarTerminal.setEnabled(false);
+
+        btnAlterarInicial.setEnabled(false);
+        btnAlterarNaoTerminal.setEnabled(false);
+        btnAlterarTerminal.setEnabled(false);
+
+        btnExcluirProd.setEnabled(false);
+        btnExcluirProdVazia.setEnabled(false);
+
+        montarGramatica.setEnabled(false);
+
+        campoNaoTerminais.setEditable(false);
+        campoTerminais.setEditable(false);
+        campoProducaoVazia.setEditable(false);
+        campoProducoes.setEditable(false);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -121,17 +142,40 @@ public class TelaInicial extends javax.swing.JFrame {
                 } else {
                     campoNaoTerminais.setEditable(false);
                     btnEnviarNaoTerminal.setEnabled(false);
+
+                    //habilita os campos das producoes
+                    btnEnviarProd.setEnabled(true);
+                    btnEnviarProdVazia.setEnabled(true);
+                    montarGramatica.setEnabled(true);
+                    campoProducaoVazia.setEditable(true);
+                    campoProducoes.setEditable(true);
+
                 }
 
             }
 
         }
-        System.out.println(valoresMascara + "antes");
-        for (String arrayNaoTerminai : arrayNaoTerminais) {
-            mascara.setValidCharacters(valoresMascara+=arrayNaoTerminai);
-            
+
+        caracteresMascara();
+    }
+
+    public void caracteresMascara() {
+        for (String naoTerminais : arrayNaoTerminais) {
+            System.out.println(naoTerminais);
+            if (naoTerminais.matches("[A-Z ]") && naoTerminais != "null") {
+                mascara.setValidCharacters(valoresMascara += naoTerminais);
+            }
+
         }
-        System.out.println(valoresMascara);
+
+        for (String terminais : arrayTerminais) {
+            System.out.println(terminais);
+            if (terminais.matches("[a-z]") && terminais != "null") {
+                mascara.setValidCharacters(valoresMascara += terminais);
+            }
+
+        }
+
     }
 
     public void trataTerminais() {
@@ -147,6 +191,13 @@ public class TelaInicial extends javax.swing.JFrame {
             }
             campoTerminais.setEditable(false);
             btnEnviarTerminal.setEnabled(false);
+
+            //habilita os botoes do proximo campo
+            btnEnviarNaoTerminal.setEnabled(true);
+            btnAlterarNaoTerminal.setEnabled(true);
+            campoNaoTerminais.setEditable(true);
+            btnExcluirProd.setEnabled(true);
+            btnExcluirProdVazia.setEnabled(true);
         }
 
     }
@@ -157,7 +208,13 @@ public class TelaInicial extends javax.swing.JFrame {
         } else {
             inicial = campoInicial.getText();
             btnEnviarInicial.setEnabled(false);
+            btnAlterarInicial.setEnabled(true);
             campoInicial.setEditable(false);
+
+            //habilita os botoes do proximo campo
+            btnEnviarTerminal.setEnabled(true);
+            btnAlterarTerminal.setEnabled(true);
+            campoTerminais.setEditable(true);
         }
 
     }
@@ -247,6 +304,10 @@ public class TelaInicial extends javax.swing.JFrame {
 
     public void montaGramatica() {
 
+        if (listaProducoes.getModel().getSize() == 0) {
+            JOptionPane.showMessageDialog(this, "Lista vazia");
+
+        }
         String producoes = listaProducoes.getModel().toString();
         String[] arrayStringsProducoes = producoes.split(",");
         for (int i = 0; i < arrayStringsProducoes.length; i++) {
@@ -270,6 +331,7 @@ public class TelaInicial extends javax.swing.JFrame {
                 }
             }
             index++;
+            System.out.println(arrayFinal[index]);
         }
 
     }
@@ -382,6 +444,13 @@ public class TelaInicial extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(campoProducoes, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEnviarProd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnExcluirProd)
+                        .addGap(4, 4, 4))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(campoInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -413,13 +482,7 @@ public class TelaInicial extends javax.swing.JFrame {
                                     .addComponent(btnEnviarProdVazia)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btnExcluirProdVazia))
-                                .addComponent(jLabel8))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEnviarProd)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnExcluirProd)))
+                                .addComponent(jLabel8)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -453,7 +516,7 @@ public class TelaInicial extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEnviarProd)
                     .addComponent(btnExcluirProd)
-                    .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
