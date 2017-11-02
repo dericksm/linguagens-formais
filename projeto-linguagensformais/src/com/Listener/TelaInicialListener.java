@@ -32,6 +32,8 @@ public class TelaInicialListener implements ActionListener{
             tela.trataInicial();
         } else if("producoes".equals(e.getActionCommand())) {
             tela.trataProducoes();
+        } else if("producoesTerminais".equals(e.getActionCommand())) {
+            tela.trataProducaoTerminal();
         } else if("producaoVazia".equals(e.getActionCommand())) {
             tela.trataProducaoVazia();
         } else if("alterarInicial".equals(e.getActionCommand())) {
