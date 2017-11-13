@@ -20,6 +20,7 @@ public class FiniteState extends State {
 		super(name);
 		this.transitions = new LinkedList<FiniteTransition>();
 	}
+
 	
 	public void setFinal() {
 		this.isFinal = true;

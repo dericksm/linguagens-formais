@@ -6,29 +6,20 @@
 package com.Frames;
 
 import com.Listener.TelaInicialListener;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.ValidaAutomato.Automato;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import static javax.swing.SwingUtilities.updateComponentTreeUI;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.PlainDocument;
 
@@ -43,21 +34,18 @@ public class TelaInicial extends javax.swing.JFrame {
     MaskFormatter mascara;
     MaskFormatter mascaraTerminais;
     String valoresMascara = "";
-    HashMap<String, String> gramatica = new HashMap<String, String>();
+    HashMap<String, String> mapa = new HashMap<String, String>();
+
     DefaultListModel modelo = new DefaultListModel();
+    DefaultListModel modeloNovo = new DefaultListModel();
+    Automato automato;
 
     public TelaInicial() throws ParseException {
         initComponents();
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
         }
         SwingUtilities.updateComponentTreeUI(this);
@@ -263,11 +251,20 @@ public class TelaInicial extends javax.swing.JFrame {
 
         }
         try {
-            modelo.add(modelo.getSize(), campoProducoes.getText().toString());
+            for (int j = 0; j < modelo.getSize(); j++) {
+                if (modelo.get(j) == campoProducoes.getText()) {
+
+                    modelo.add(modelo.getSize(), campoProducoes.getText());
+                    return;
+                }
+
+            }
+
+            modelo.add(modelo.getSize(), campoProducoes.getText());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Produção Inválida");
         }
-
+        campoProducoes.setText("");
         campoProducoes.requestFocus();
 
     }
@@ -282,11 +279,12 @@ public class TelaInicial extends javax.swing.JFrame {
 
         }
         try {
-            modelo.add(modelo.getSize(), campoProducoes1.getText().toString());
+            modelo.add(modelo.getSize(), campoProducoes1.getText());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Produção Inválida");
         }
-
+        
+        campoProducoes1.setText("");
         campoProducoes1.requestFocus();
 
     }
@@ -301,12 +299,13 @@ public class TelaInicial extends javax.swing.JFrame {
 
         }
         try {
-            modelo.add(modelo.getSize(), campoProducaoVazia.getText().toString());
+            modelo.add(modelo.getSize(), campoProducaoVazia.getText());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Produção Inválida");
         }
-
+        campoProducaoVazia.setText("");
         campoProducaoVazia.requestFocus();
+        
 
     }
 
@@ -317,12 +316,29 @@ public class TelaInicial extends javax.swing.JFrame {
 
     public void montaGramatica() {
 
+        modeloNovo = modelo;
+
         if (listaProducoes.getModel().getSize() == 0) {
             JOptionPane.showMessageDialog(this, "Lista vazia");
             return;
 
         }
-        
+
+        for (int j = 0; j < modeloNovo.getSize(); j++) {
+            for (int i = 0; i < modeloNovo.getSize(); i++) {
+                if (modeloNovo.get(i) != modeloNovo.get(j) && modeloNovo.get(j).toString().length() != 6 && modeloNovo.get(i).toString().length() != 6 && modeloNovo.get(j).toString().charAt(0) == modeloNovo.get(i).toString().charAt(0) && modeloNovo.get(j).toString().charAt(6) == modeloNovo.get(i).toString().charAt(6)) {
+                    String prod = modeloNovo.get(j).toString() + modeloNovo.get(i).toString().charAt(5);
+
+                    modeloNovo.remove(i);
+                    modeloNovo.remove(j);
+                    modeloNovo.add(modeloNovo.getSize(), prod);
+
+                }
+
+            }
+
+        }
+
         String producoes = listaProducoes.getModel().toString();
         String[] arrayStringsProducoes = producoes.split(",");
         for (int i = 0; i < arrayStringsProducoes.length; i++) {
@@ -332,34 +348,47 @@ public class TelaInicial extends javax.swing.JFrame {
         juntaProducoes(arrayStringsProducoes);
     }
 
-    private void juntaProducoes(String[] arrayStringsProducoes) {
-        String[] arrayComparar = arrayStringsProducoes;
-        String[] arrayFinal = new String[arrayStringsProducoes.length];
+    public void juntaProducoes(String[] arrayStringsProducoes) {
 
-        int index = 0;
         for (String a1 : arrayNaoTerminais) {
-            
-            arrayFinal[index] = a1 + " ->";
 
-            for (String a2 : arrayComparar) {
+            for (String a2 : arrayStringsProducoes) {
+                String value;
+
                 if (a1.charAt(0) == a2.charAt(1)) {
-                    arrayFinal[index] += " |" + a2.substring(5, a2.length());
+                    if (mapa.containsKey(a1)) {
+
+                        value = mapa.get(a1);
+                        mapa.put(a1, value + "," + a2.substring(5, a2.length()));
+                    } else {
+                        mapa.put(String.valueOf(a1.charAt(0)), a2.substring(5, a2.length()));
+                    }
 
                 }
             }
-            index++;
-            
-        }
-        for (String string : arrayFinal) {
-            System.out.println(string);
-        }
 
+        }
+        System.out.println(mapa.entrySet());
+
+        
     }
 
+    
+     public void testarPalavra() {
+        if (campoPalavra.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Campo Vazio");
+            
+        }
+        else
+           automato = new Automato(mapa, campoPalavra.getText(), inicial, this); 
+    }
+     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        jMenuItem1 = new javax.swing.JMenuItem();
         jLabel1 = new javax.swing.JLabel();
         btnEnviarInicial = new javax.swing.JToggleButton();
         btnAlterarInicial = new javax.swing.JToggleButton();
@@ -387,6 +416,12 @@ public class TelaInicial extends javax.swing.JFrame {
         campoProducoes1 = new javax.swing.JFormattedTextField();
         btnExcluirProdTer = new javax.swing.JToggleButton();
         jLabel9 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        campoPalavra = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        btnTestar = new javax.swing.JToggleButton();
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -469,6 +504,12 @@ public class TelaInicial extends javax.swing.JFrame {
 
         jLabel9.setText("Produção com um Terminal:");
 
+        jLabel5.setText("Informe uma palavra a ser testada:");
+
+        btnTestar.addActionListener(listener);
+        btnTestar.setActionCommand("testar");
+        btnTestar.setText("Testar");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -476,30 +517,8 @@ public class TelaInicial extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(montarGramatica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(campoProducaoVazia, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnEnviarProdVazia)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnExcluirProdVazia))
-                                .addComponent(jLabel8))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(campoProducoes1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEnviarProdTer)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnExcluirProdTer))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEnviarProd)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnExcluirProd, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(campoInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -513,70 +532,112 @@ public class TelaInicial extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnAlterarTerminal))
                             .addComponent(jLabel3)
+                            .addComponent(jLabel4)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(campoNaoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnEnviarNaoTerminal)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnAlterarNaoTerminal))
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel1)
                             .addComponent(jLabel7)
-                            .addComponent(jLabel9))
-                        .addGap(0, 201, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnEnviarProd))
+                                    .addComponent(jLabel9))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnExcluirProd, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(montarGramatica, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(campoProducaoVazia, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnEnviarProdVazia)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnExcluirProdVazia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(campoProducoes1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnEnviarProdTer)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnExcluirProdTer, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(campoPalavra, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnTestar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(19, 19, 19)))
+                        .addComponent(jLabel6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEnviarInicial)
-                    .addComponent(btnAlterarInicial)
-                    .addComponent(campoInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEnviarTerminal)
-                    .addComponent(btnAlterarTerminal))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(campoNaoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEnviarNaoTerminal)
-                    .addComponent(btnAlterarNaoTerminal))
-                .addGap(14, 14, 14)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEnviarProd)
-                    .addComponent(btnExcluirProd)
-                    .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEnviarProdTer)
-                    .addComponent(btnExcluirProdTer)
-                    .addComponent(campoProducoes1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnEnviarProdVazia)
-                        .addComponent(btnExcluirProdVazia))
-                    .addComponent(campoProducaoVazia, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(264, 264, 264)
+                        .addComponent(jLabel6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnEnviarInicial)
+                            .addComponent(btnAlterarInicial)
+                            .addComponent(campoInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(campoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEnviarTerminal)
+                            .addComponent(btnAlterarTerminal))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(campoNaoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEnviarNaoTerminal)
+                            .addComponent(btnAlterarNaoTerminal))
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnEnviarProd)
+                            .addComponent(btnExcluirProd)
+                            .addComponent(campoProducoes, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnEnviarProdTer)
+                            .addComponent(campoProducoes1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnExcluirProdTer))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnEnviarProdVazia)
+                                .addComponent(btnExcluirProdVazia))
+                            .addComponent(campoProducaoVazia, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(montarGramatica)
-                .addContainerGap(153, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel5)
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campoPalavra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTestar))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         pack();
@@ -642,18 +703,24 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JToggleButton btnExcluirProd;
     private javax.swing.JToggleButton btnExcluirProdTer;
     private javax.swing.JToggleButton btnExcluirProdVazia;
+    private javax.swing.JToggleButton btnTestar;
     private javax.swing.JFormattedTextField campoInicial;
     private javax.swing.JTextField campoNaoTerminais;
+    private javax.swing.JTextField campoPalavra;
     private javax.swing.JFormattedTextField campoProducaoVazia;
     private javax.swing.JFormattedTextField campoProducoes;
     private javax.swing.JFormattedTextField campoProducoes1;
     private javax.swing.JTextField campoTerminais;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> listaProducoes;
     private javax.swing.JToggleButton montarGramatica;

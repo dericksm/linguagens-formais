@@ -11,30 +11,47 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class FiniteAutomatonTest {
-
+        static FiniteState z[] = new FiniteState[100];
+        
 	@Test
-	public void testA() {
-		FiniteState z0 = new FiniteState("z0");
+	public static void main(String args[]) {
+                
+            
+            /*
+            FiniteState z0 = new FiniteState("z0");
 		FiniteState z1 = new FiniteState("z1");
 		FiniteState z2 = new FiniteState("z2");
+            */
+                
+                for (int i = 0; i < 3; i++) {
+                    z[i] = new FiniteState("z" + i);
+                
+            }
 
-		z0.setFinal();
+		z[1].setFinal();
 		
-		z0.addTransition(z1, 'p');
-		z0.addTransition(z2, 'v');
+		z[0].addTransition(z[0], 'b');
+		z[0].addTransition(z[1], 'a');
 		
-		z1.addTransition(z2, 't');
+		z[1].addTransition(z[1], 'a', 'b');
 		
-		z2.addTransition(z0, 't');
-		z2.addTransition(z2, 'v');
 		
-		FiniteAutomaton automat = new FiniteAutomaton(z0);
+		
+		FiniteAutomaton automat = new FiniteAutomaton(z[0]);
 
-		assertTrue(automat.testWord("ptvtvvt").isValid());
+		          if (automat.testWord("aab").isValid()) {
+                              System.out.println("ae porra");
+                          }
+                          
+                
+            
 		
 		System.out.println(automat.testWord("ptvtvvt").toString());
 		
-		assertFalse(automat.testWord("pptt").isValid());
+		          if (!automat.testWord("pptt").isValid()) {
+                              System.out.println("nao é");
+                
+            }
 	}
 	
 	@Test

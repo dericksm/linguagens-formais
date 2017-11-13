@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FiniteAutomaton {
-	private final FiniteState initial;
+	public final FiniteState initial;
 	
 	public FiniteAutomaton(final FiniteState initial) {
 		this.initial = initial;
@@ -24,7 +24,7 @@ public class FiniteAutomaton {
 		return testWord(getInitial(), word, 0, new Result(word));
 	}
 	
-	private Result testWord(final FiniteState state, final String word, final Integer index, final Result result) {
+	public Result testWord(final FiniteState state, final String word, final Integer index, final Result result) {
 		result.addState(state);
 		
 		if (index >= word.length()) {
@@ -44,9 +44,9 @@ public class FiniteAutomaton {
 		return nextResult;
 	}
 	
-	protected class Result implements Cloneable {
-		private String word;
-		private List<FiniteState> states;
+	public class Result implements Cloneable {
+		public String word;
+		public List<FiniteState> states;
 
 		public Result(final String word) {
 			this.word = word;
