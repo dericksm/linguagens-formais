@@ -90,16 +90,16 @@ public class Automato {
                                         }
                                     }
                                 }
-                            } 
+                            }
                             if (string.length() == 3) {
                                 for (FiniteState z1 : z) {
                                     if (z1 != null) {
                                         if (z1.getName().equals(String.valueOf(string.charAt(1)))) {
-                                            z2.addTransition(z1, string.charAt(0), string.charAt(2));
+                                            z2.addTransition(z1, string.replaceAll("[^a-z]", "").toCharArray());
                                         }
                                     }
                                 }
-                            } 
+                            }
                         }
                     }
                 }
@@ -121,7 +121,7 @@ public class Automato {
             }
         });
         testaPalavra();
-        
+
     }
 
     public void testaPalavra() {
@@ -130,9 +130,9 @@ public class Automato {
                 FiniteAutomaton automat = new FiniteAutomaton(z[i]);
                 if ((automat.testWord(testWord).isValid())) {
                     JOptionPane.showMessageDialog(frame, "Palavra válida");
-                }
-                else
+                } else {
                     JOptionPane.showMessageDialog(frame, "Palavra inválida");
+                }
 
             }
 

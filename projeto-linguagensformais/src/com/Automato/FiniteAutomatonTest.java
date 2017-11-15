@@ -33,7 +33,7 @@ public class FiniteAutomatonTest {
 		z[0].addTransition(z[0], 'b');
 		z[0].addTransition(z[1], 'a');
 		
-		z[1].addTransition(z[1], 'a', 'b');
+		z[1].addTransition(z[1], 'a', 'b', 'c');
 		
 		
 		
@@ -46,7 +46,7 @@ public class FiniteAutomatonTest {
                 
             
 		
-		System.out.println(automat.testWord("ptvtvvt").toString());
+		System.out.println(automat.testWord("aabcf").toString());
 		
 		          if (!automat.testWord("pptt").isValid()) {
                               System.out.println("nao é");
@@ -65,7 +65,7 @@ public class FiniteAutomatonTest {
 		q1.setFinal();
 		q2.setFinal();
 		
-		q0.addTransition(q4, 't', 'p');
+		q0.addTransition(q4, 't', 'p', 'c');
 		q0.addTransition(q3, 'v');
 		q1.addTransition(q2, 't');
 		q1.addTransition(q1, 'v');
@@ -76,7 +76,7 @@ public class FiniteAutomatonTest {
 		
 		FiniteAutomaton automat = new FiniteAutomaton(q0);
 
-		assertTrue(automat.testWord("vptptptp").isValid());
+		assertTrue(automat.testWord("vptptptpc").isValid());
 		
 		assertFalse(automat.testWord("vpp").isValid());
 	}
