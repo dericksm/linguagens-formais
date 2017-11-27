@@ -32,7 +32,7 @@ public class FiniteAutomaton {
 		}
 		
 		final List<FiniteState> states = state.getState(word.charAt(index));
-		
+		          
 		Result nextResult = null;
 		for (FiniteState next : states) {
 			nextResult = testWord(next, word, index+1, result.clone());
@@ -59,6 +59,7 @@ public class FiniteAutomaton {
 
 		public FiniteState addState(FiniteState state) {
 			this.states.add(state);
+                        
 			return state;
 		}
 		

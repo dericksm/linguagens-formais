@@ -41,7 +41,7 @@ public class Automato {
 
         mapa.entrySet().forEach((Map.Entry<String, String> entry) -> {
             String[] teste;
-            teste = entry.getValue().replaceAll("[^a-zA-Z,]", "").split(",");
+            teste = entry.getValue().replaceAll("[^a-zA-Z,&]", "").split(",");
 
             for (String string : teste) {
                 System.out.println(string);
@@ -79,19 +79,9 @@ public class Automato {
                     if (z2.getName().equals(entry.getKey())) {
                         String[] array = entry.getValue().replaceAll("[^a-zA-Z,]", "").split(",");
                         for (String string : array) {
-                            System.out.println(string);
-                            System.out.println(string.length());
-                            if (string.length() == 2) {
-                                for (FiniteState z1 : z) {
-                                    if (z1 != null) {
-                                        if (z1.getName().equals(String.valueOf(string.charAt(1)))) {
-                                            z2.addTransition(z1, string.charAt(0));
+                            
 
-                                        }
-                                    }
-                                }
-                            }
-                            if (string.length() == 3) {
+                            if (string.length() >= 2) {
                                 for (FiniteState z1 : z) {
                                     if (z1 != null) {
                                         if (z1.getName().equals(String.valueOf(string.charAt(1)))) {
@@ -99,7 +89,9 @@ public class Automato {
                                         }
                                     }
                                 }
+
                             }
+
                         }
                     }
                 }
@@ -129,8 +121,10 @@ public class Automato {
             if (z[i] != null && z[i].getName().equals(estadoInicial)) {
                 FiniteAutomaton automat = new FiniteAutomaton(z[i]);
                 if ((automat.testWord(testWord).isValid())) {
+                    System.out.println(automat.testWord(testWord).toString());
                     JOptionPane.showMessageDialog(frame, "Palavra válida");
                 } else {
+                    System.out.println(automat.testWord(testWord).toString());
                     JOptionPane.showMessageDialog(frame, "Palavra inválida");
                 }
 

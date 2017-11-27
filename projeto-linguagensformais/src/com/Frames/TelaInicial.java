@@ -35,9 +35,9 @@ public class TelaInicial extends javax.swing.JFrame {
     MaskFormatter mascaraTerminais;
     String valoresMascara = "";
     HashMap<String, String> mapa = new HashMap<String, String>();
-
+DefaultListModel modeloNovo = new DefaultListModel();
     DefaultListModel modelo = new DefaultListModel();
-    DefaultListModel modeloNovo = new DefaultListModel();
+    
     Automato automato;
 
     public TelaInicial() throws ParseException {
@@ -126,6 +126,7 @@ public class TelaInicial extends javax.swing.JFrame {
 
         if (campoNaoTerminais.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, preencha o campo não terminais");
+            
 
         } else {
 
@@ -138,7 +139,7 @@ public class TelaInicial extends javax.swing.JFrame {
                 if (arrayNaoTerminais[i].equals(inicial)) {
                     JOptionPane.showMessageDialog(this, "O símbolo " + inicial + " é o termo inicial");
                     arrayNaoTerminais = null;
-                    break;
+                    campoNaoTerminais.setText("");
                 } else {
                     campoNaoTerminais.setEditable(false);
                     btnEnviarNaoTerminal.setEnabled(false);
@@ -316,7 +317,7 @@ public class TelaInicial extends javax.swing.JFrame {
 
     public void montaGramatica() {
 
-        modeloNovo = modelo;
+        //modeloNovo = modelo;
 
         if (listaProducoes.getModel().getSize() == 0) {
             JOptionPane.showMessageDialog(this, "Lista vazia");
@@ -324,6 +325,7 @@ public class TelaInicial extends javax.swing.JFrame {
 
         }
 
+        /*
         for (int j = 0; j < modeloNovo.getSize(); j++) {
             for (int i = 0; i < modeloNovo.getSize(); i++) {
                 if (modeloNovo.get(i) != modeloNovo.get(j) && modeloNovo.get(j).toString().length() != 6 && modeloNovo.get(i).toString().length() != 6 && modeloNovo.get(j).toString().charAt(0) == modeloNovo.get(i).toString().charAt(0) && modeloNovo.get(j).toString().charAt(6) == modeloNovo.get(i).toString().charAt(6)) {
@@ -338,6 +340,7 @@ public class TelaInicial extends javax.swing.JFrame {
             }
 
         }
+        */
 
         String producoes = listaProducoes.getModel().toString();
         String[] arrayStringsProducoes = producoes.split(",");
