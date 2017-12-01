@@ -399,21 +399,27 @@ public class TelaInicial extends javax.swing.JFrame {
         }
         
         System.out.println("G = {N,T,P,S}");
-        System.out.println("N = {" + N + " }");
-        System.out.println("T = {" + T + " }");
+        System.out.println("N = {" + N.substring(0, N.lastIndexOf(",")) + "}");
+        System.out.println("T = {" + T.substring(0, T.lastIndexOf(",")) + "}");
         
         for (String prod : arrayStringsProducoes) {
+            
             if(prod.length() == 8) {
                 P = P + "\n" + "t(" + prod.charAt(1) + "," + prod.charAt(6) + ")" + "= " + prod.charAt(7);
             }
-            else
-                P = P + "\n" + "t(" + prod.charAt(1) + "," + prod.charAt(6) + ")" + "= " + prod.charAt(6);
+            //else if(prod.charAt(7) != "[A-Z]" ){
+                P = P + "\n" + "t(" + prod.charAt(1) + "," + prod.charAt(6) + ")" + "= " + prod.charAt(1) + "'";
+                String newState = prod.charAt(1) + "'";
+                for (String terminais : arrayTerminais) {
+                    terminais.replaceAll("[^a-z]", "");
+                P = P + "\n" + "t(" + newState + "," + terminais + ")" + "= - ";
+            }
+            }
                 
             
         }
-        System.out.println("P = {" + P + "}");
-        
-    }
+        //System.out.println("P = {" + P + "}");
+
 
     
      public void testarPalavra() {
@@ -463,8 +469,6 @@ public class TelaInicial extends javax.swing.JFrame {
         campoPalavra = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         btnTestar = new javax.swing.JToggleButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tabela = new javax.swing.JTable();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -555,19 +559,6 @@ public class TelaInicial extends javax.swing.JFrame {
         btnTestar.setActionCommand("testar");
         btnTestar.setText("Testar");
 
-        tabela.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(tabela);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -618,7 +609,7 @@ public class TelaInicial extends javax.swing.JFrame {
                         .addComponent(jLabel6))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
-                        .addGap(97, 572, Short.MAX_VALUE))
+                        .addGap(97, 106, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -635,9 +626,7 @@ public class TelaInicial extends javax.swing.JFrame {
                                 .addComponent(btnAlterarTerminal))
                             .addComponent(jLabel3)
                             .addComponent(jLabel1))
-                        .addGap(21, 21, 21)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 10, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -649,23 +638,18 @@ public class TelaInicial extends javax.swing.JFrame {
                         .addGap(264, 264, 264)
                         .addComponent(jLabel6))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnEnviarInicial)
-                                    .addComponent(btnAlterarInicial)
-                                    .addComponent(campoInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(campoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnEnviarTerminal)
-                                    .addComponent(btnAlterarTerminal)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnEnviarInicial)
+                            .addComponent(btnAlterarInicial)
+                            .addComponent(campoInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(campoTerminais, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEnviarTerminal)
+                            .addComponent(btnAlterarTerminal))
+                        .addGap(24, 24, 24)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -788,11 +772,9 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> listaProducoes;
     private javax.swing.JToggleButton montarGramatica;
-    private javax.swing.JTable tabela;
     // End of variables declaration//GEN-END:variables
 
 }
